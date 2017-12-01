@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 // import logo from './logo.svg';
 import 'bulma/css/bulma.css';
 import './App.css';
-import { get } from './Util.js';
+// import { get } from './Util.js';
 import dankEngine from './memesauce/getdank.js';
 import InfiniteScroll from 'react-infinite-scroller';
 import ItemImgur from './Imgur.js';
+import ItemYouTube from './YouTube.js';
 
 // Imports before Requires
 let _ = require('lodash');
@@ -37,7 +38,6 @@ class App extends Component {
     }
 
     loadMore() {
-        // return new Promise((resolve, reject) => {
             dankEngine.getNext()
                 .then(function (data) {
                     let allItems = this.state.items.concat(data);
@@ -48,9 +48,8 @@ class App extends Component {
 
                 }.bind(this))
                 .catch((error) => {
-                    // reject(error);
+                    console.error(error);
                 })
-        // })
     }
 
     render() {
@@ -100,6 +99,9 @@ const Row = ({ items }) => {
             {items.map((item, idx) => {
                 if (item.__type === "imgur") {
                     return <ItemImgur item={item} key={idx} />
+                }
+                else {
+                    return <ItemYouTube item={item} key={idx} />
                 }
             })}
         </div>

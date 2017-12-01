@@ -1,3 +1,5 @@
+let _ = require("lodash");
+
 // Generic get request
 const get = (url, headers) => {
     // Default headers - accept json response
@@ -26,6 +28,38 @@ const jsonResponse = (response) => {
     }
 }
 
+// Random merge arrays
+const randomMerge = (...arrays) => {
+    let clonedArrays = [];
+    let mergedArray = [];
+
+    arrays.forEach((arr, idx) => {
+        clonedArrays.push(_.clone(arr));
+    });
+
+    const getArraysLength = () => {
+        return clonedArrays
+            .filter((arr) => { return arr.length })
+            .length;
+    }
+
+    do {
+
+        let availableArrays = clonedArrays.filter((arr) => { return arr.length > 0 });
+        // pick a random array
+        let arr = availableArrays[ Math.floor(Math.random() * availableArrays.length) ];
+        let index = Math.floor(Math.random() * arr.length);
+
+        // splice arr at index and push onto merged array
+        // splice returns an array, we just want the first item in that array though
+        let item = arr.splice(index, 1);
+        mergedArray.push(item[0]);
+
+    } while(getArraysLength() > 0);
+
+    return mergedArray;
+}
+
 // Download a file form a url.
 const saveFile = (url) => {
     // credit - https://ausdemmaschinenraum.wordpress.com/2012/12/06/how-to-save-a-file-from-a-url-with-javascript/
@@ -49,5 +83,6 @@ const saveFile = (url) => {
 
 export {
     get,
-    saveFile
+    saveFile,
+    randomMerge
 }
