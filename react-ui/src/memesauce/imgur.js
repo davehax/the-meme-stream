@@ -1,5 +1,7 @@
 import RemoteDataPager, { DataPager } from './datapager.js';
 
+// Client ID: 7efb2775425b24a
+
 const getHeaders = new Headers({
     "accept": "application/json",
     "authorization": "Client-ID 7efb2775425b24a"
@@ -12,19 +14,10 @@ class ImgurSauce {
         this.dataPager = new DataPager(this.remotePager, pageSize, this.dataStamper);
         // ^^^ .bind(this) so the "this" context is preserved when the function is used as a callback ^^^
 
-        // Track array position variables
-        // this.pageSize = pageSize;
-        // this.position = 0;
-
         // Imgur API vars
         this.terms = terms;
         this.sort = sort;
         this.dateWindow = dateWindow;
-
-        // Store results as we get them ?
-        // this.results = [];
-
-        // this.getNext = this.getNext.bind(this);
     }
 
     // url generator function
@@ -34,44 +27,8 @@ class ImgurSauce {
     }
 
     getNext() {
-        // return new Promise((resolve, reject) => {
-
-        //     if (this.position >= this.results.length - 1 || this.position + this.pageSize >= this.results.length - 1) {
-        //         // We need to load the next page from the API before returning results
-        //         this.internalLoadNextPage()
-        //             .then(function() { resolve(this.internalReturnNextPage()); }.bind(this))
-        //             .catch((error) => { reject(error); })
-        //     }
-        //     else {
-        //         resolve(this.internalReturnNextPage());
-        //     }
-
-        // });
         return this.dataPager.getNext();
     }
-
-    // Internal functions
-    // internalLoadNextPage() {
-    //     return new Promise((resolve, reject) => {
-
-    //         this.remotePager.getNext()
-    //             .then(function(data) {
-    //                 // Add array to end of existing array
-    //                 this.results = this.results.concat(data.data);
-
-    //                 // Empty resolve - this function must not be used to directly retrieve the next lot of data
-    //                 resolve();
-    //             }.bind(this))
-    //             .catch((error) => { reject(error) })
-
-    //     });
-    // }
-
-    // internalReturnNextPage() {
-    //     let dataSlice = this.results.slice(this.position, this.position + this.pageSize);
-    //     this.position += this.pageSize;
-    //     return dataSlice;
-    // }
 
     dataStamper(data) {
         // extract "data" property
