@@ -1,0 +1,26 @@
+.app {
+    background-color: blue;
+    min-height: 100vh;
+
+    background: #f0f9ff;
+    background: -moz-linear-gradient(-45deg, #f0f9ff 0%, #cbebff 47%, #a1dbff 100%);
+    background: -webkit-linear-gradient(-45deg, #f0f9ff 0%,#cbebff 47%,#a1dbff 100%);
+    background: linear-gradient(135deg, #f0f9ff 0%,#cbebff 47%,#a1dbff 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f0f9ff', endColorstr='#a1dbff',GradientType=1 );
+}
+
+.image.image-alt {
+    overflow: hidden;
+}
+
+.image.image-alt.is-square img {
+    top: 50%;
+    left: 0;
+    right: 0;
+    bottom: initial;
+
+    transform: translateY(-50%);
+
+    width: 100%;
+    height: auto;
+}

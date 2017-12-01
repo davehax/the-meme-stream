@@ -1,0 +1,24 @@
+{
+  "name": "the-meme-stream",
+  "version": "1.0.0",
+  "description": "Infinite memes",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server",
+    "heroku-postbuild": "cd react-ui/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
+  },
+  "cacheDirectories": [
+    "node_modules",
+    "react-ui/node_modules"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "4.16.2",
+    "path": "0.12.7"
+  },
+  "engines": {
+    "node": "8.1.4",
+    "npm": "5.3.0"
+  }
+}
