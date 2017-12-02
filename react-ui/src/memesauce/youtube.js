@@ -1,5 +1,6 @@
 import RemoteDataPager, { DataPager } from './datapager.js';
 
+const Moment = require('moment');
 const apiKey = "AIzaSyDoOJW_GQD644vSrDlAew3Bpg9JipGSuhM";
 
 // get("https://content.googleapis.com/youtube/v3/search?maxResults=25&part=snippet&q=surfing&type=video&key=AIzaSyDoOJW_GQD644vSrDlAew3Bpg9JipGSuhM")
@@ -19,7 +20,8 @@ class YouTubeSauce {
     }
 
     urlGenerator(page) {
-        let url = `https://content.googleapis.com/youtube/v3/search?maxResults=50&part=snippet&q=${this.query}&type=video&key=${apiKey}`
+        let publishedAfter = new Moment().subtract(1, "months").format("YYYY-MM-DDTHH:mm:ss") + "Z";
+        let url = `https://content.googleapis.com/youtube/v3/search?maxResults=50&part=snippet&q=${this.query}&type=video&videoDuration=short&videoEmbeddable=true&publishedAfter=${publishedAfter}&key=${apiKey}`
         if (this.nextPageToken !== "") {
             url += `&nextPageToken=${this.nextPageToken}`;
         }

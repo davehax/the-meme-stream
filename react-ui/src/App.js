@@ -53,9 +53,15 @@ class App extends Component {
     }
 
     render() {
+        let loading = (
+            <section className="container has-text-white has-text-centered is-size-1">
+                <i className="fa fa-bolt pulse" aria-hidden="true"></i>
+            </section>
+        );
+
         return (
             <div className="app">
-                <section className="hero is-primary">
+                <section className="hero is-primary is-bold">
                     <div className="hero-body">
                         <div className="container">
                             <h1 className="title">The Meme Stream</h1>
@@ -65,17 +71,17 @@ class App extends Component {
                 </section>
                 <section className="section">
                     <div className="container">
-                            {this.state.items.length ? (
-                                <InfiniteScroll
-                                    pageStart={0}
-                                    loadMore={this.loadMore}
-                                    hasMore={true}
-                                    loader={<div className="loading">Loading...</div>}
-                                    threshold={750}
-                                >
-                                    <Memes items={this.state.items} />
-                                </InfiniteScroll>
-                            ) : null}
+                        {this.state.items.length ? (
+                            <InfiniteScroll
+                                pageStart={0}
+                                loadMore={this.loadMore}
+                                hasMore={true}
+                                loader={loading}
+                                threshold={750}
+                            >
+                                <Memes items={this.state.items} />
+                            </InfiniteScroll>
+                        ) : null}
                     </div>
                 </section>
             </div>
