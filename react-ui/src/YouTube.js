@@ -8,7 +8,7 @@ class ItemYouTube extends Component {
 
         return (
             <div className="column">
-                <div className="card">
+                <div className="card style-youtube">
                     <div className="card-header">
                         <h3 className="card-header-title">{item.snippet.title}</h3>
                     </div>

@@ -9,18 +9,46 @@
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f0f9ff', endColorstr='#a1dbff',GradientType=1 ); */
 
 
-    background: #222;
+    background: #fff;
+    background-image: url('./img/skulls-1.jpg?v=0.1');
+    background-image: url('./img/stardust.png?v=0.1');
+    background-repeat: repeat;
+    background-position: center center;
+}
+
+.hero {
+    box-shadow: 0px 20px 60px -10px rgba(0, 0, 0, 0.65);
 }
 
 /* Card Styles */
 .card {
-    /* -webkit-box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
-    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1); */
+    -webkit-box-shadow: 0 0 0 1px rgba(10, 10, 10, 0.1), 0 2px 3px rgba(10, 10, 10, 0.1);
+    box-shadow: 0 0 0 1px rgba(10, 10, 10, 0.1), 0 2px 3px rgba(10, 10, 10, 0.1);
 
-    -webkit-box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px #00d1b2;
-    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px #00d1b2;
+    /* -webkit-box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px #00d1b2; */
+    /* box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px #00d1b2; */
 
-    border-radius: 2px;
+    border-radius: 3px 3px 0px 0px;
+}
+
+.card.style-imgur {
+    -webkit-box-shadow: 0 0 0 2px #151515, 0 3px 6px rgba(10, 10, 10, 0.6);
+    box-shadow: 0 0 0 2px #151515, 0 3px 6px rgba(10, 10, 10, 0.6);
+}
+
+.card.style-imgur .card-header-title {
+    background-color: #151515;
+    color: #fff;
+}
+
+.card.style-youtube {
+    -webkit-box-shadow: 0 0 0 1px #fc0d1c, 0 3px 6px rgba(10, 10, 10, 0.6);
+    box-shadow: 0 0 0 1px #fc0d1c, 0 3px 6px rgba(10, 10, 10, 0.6);
+}
+
+.card.style-youtube .card-header-title {
+    background-color: #fc0d1c;
+    color: #fff;
 }
 
 /* Enforcing similar sized cards */

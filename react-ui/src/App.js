@@ -61,9 +61,9 @@ class App extends Component {
 
         return (
             <div className="app">
-                <section className="hero is-primary is-bold">
+                <section className="hero is-danger is-bold">
                     <div className="hero-body">
-                        <div className="container">
+                        <div className="container has-text-centered">
                             <h1 className="title">The Meme Stream</h1>
                             <h2 className="subtitle">Memeing at the speed of light</h2>
                         </div>

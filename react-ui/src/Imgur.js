@@ -80,7 +80,7 @@ class ItemImgur extends Component {
 
         return (
             <div className="column">
-                <div className="card">
+                <div className="card style-imgur">
                     <div className="card-header">
                         <h3 className="card-header-title">{item.title}</h3>
                     </div>
@@ -91,7 +91,12 @@ class ItemImgur extends Component {
                     </div>
                     <footer className="card-footer">
                         <a className="card-footer-item" onClick={this.openModal}>Open</a>
-                        <a className="card-footer-item" onClick={this.downloadAsset} download={thumbnailDownload}>Download</a>
+                        <a className="card-footer-item" onClick={this.downloadAsset} download={thumbnailDownload}>
+                            <span className="icon has-text-info">
+                                <i className="fa fa-arrow-circle-o-down" aria-hidden="true"></i>
+                            </span>
+                            <span>Download</span>
+                        </a>
                     </footer>
                 </div>
 
@@ -102,7 +107,7 @@ class ItemImgur extends Component {
                         {this.state.modalIsActive ? (
                             modalImages.map((image, idx) => {
                                 return (
-                                    <div className="card" key={image.id} rel={image.id} download={image.link} style={{ marginBottom: "1.5rem" }}>
+                                    <div className="card style-imgur" key={image.id} rel={image.id} download={image.link} style={{ marginBottom: "1.5rem" }}>
                                         {image.description !== null ?
                                             <div className="card-header">
                                                 <h3 className="card-header-title">{image.description}</h3>
@@ -113,11 +118,16 @@ class ItemImgur extends Component {
                                             </figure>
                                         </div>
                                         <footer className="card-footer">
-                                            <a className="card-footer-item" onClick={this.downloadAsset} download={image.link}>Download</a>
+                                            <a className="card-footer-item" onClick={this.downloadAsset} download={image.link}>
+                                                <span className="icon has-text-info">
+                                                    <i className="fa fa-arrow-circle-o-down" aria-hidden="true"></i>
+                                                </span>
+                                                <span>Download</span>
+                                            </a>
                                         </footer>
                                     </div>
                                 )
-                        })
+                            })
                         ) : null}
                     </div>
                     <button className="modal-close is-large" aria-label="close" onClick={this.closeModal}></button>
