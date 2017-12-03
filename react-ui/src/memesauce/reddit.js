@@ -1,6 +1,6 @@
 import RemoteDataPager, { DataPager } from './datapager.js';
 
-const development = true;
+const development = false;
 let accessToken = "";
 let expireTime = "";
 
