@@ -1,6 +1,5 @@
 import RemoteDataPager, { DataPager } from './datapager.js';
 
-// Client ID: TZd97USXS0OXk_jx-9fsCXdWyvA
 const development = true;
 let accessToken = "";
 let expireTime = "";
