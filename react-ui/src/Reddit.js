@@ -79,7 +79,8 @@ class ItemReddit extends Component {
                     </div>
                     <footer className="card-footer">
                         <a className="card-footer-item" onClick={this.openModal}>Open</a>
-                        <a className="card-footer-item" onClick={this.downloadAsset} download={thumbnailDownload}>
+                        {/* onClick={this.downloadAsset} */}
+                        <a className="card-footer-item" download={thumbnailDownload} href={thumbnailDownload}>
                             <span className="icon has-text-info">
                                 <i className="fa fa-arrow-circle-o-down" aria-hidden="true"></i>
                             </span>
@@ -106,7 +107,8 @@ class ItemReddit extends Component {
                                             </figure>
                                         </div>
                                         <footer className="card-footer">
-                                            <a className="card-footer-item" onClick={this.downloadAsset} download={image.url}>
+                                        {/* onClick={this.downloadAsset} */}
+                                            <a className="card-footer-item" download={image.url} href={image.url}>
                                                 <span className="icon has-text-info">
                                                     <i className="fa fa-arrow-circle-o-down" aria-hidden="true"></i>
                                                 </span>

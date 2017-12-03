@@ -14,7 +14,9 @@ const getRequestHeaders = () => {
 
 const refreshAccessToken = () => {
     let refreshTokenUrl = "/token/reddit";
-    if (development) { refreshTokenUrl = `http://localhost:5000${refreshTokenUrl}`; }
+    if (development === true) { 
+        refreshTokenUrl = `http://localhost:5000${refreshTokenUrl}`; 
+    }
 
     return new Promise((resolve, reject) => {
         fetch(refreshTokenUrl, {

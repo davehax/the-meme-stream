@@ -41,13 +41,13 @@
 }
 
 .card.style-reddit {
-    -webkit-box-shadow: 0 0 0 1px blue, 0 3px 6px rgba(10, 10, 10, 0.6);
-    box-shadow: 0 0 0 1px blue, 0 3px 6px rgba(10, 10, 10, 0.6);
+    -webkit-box-shadow: 0 0 0 1px #cee3f8, 0 3px 6px rgba(10, 10, 10, 0.6);
+    box-shadow: 0 0 0 1px #cee3f8, 0 3px 6px rgba(10, 10, 10, 0.6);
 }
 
 .card.style-reddit .card-header-title {
-    background-color: blue;
-    color: #fff;
+    background-color: #cee3f8;
+    /* color: #fff; */
 }
 
 /* Enforcing similar sized cards */
