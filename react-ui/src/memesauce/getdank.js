@@ -2,6 +2,7 @@
 // I hereby declare this project downright stupid
 import ImgurSauce from './imgur.js';
 import YouTubeSauce from './youtube.js';
+import RedditSauce from './reddit.js';
 import { randomMerge } from '../Util.js';
 
 const pageSize = 9;
@@ -14,18 +15,36 @@ class DankEngine {
         this.youtubeSauce_dank = new YouTubeSauce("meme", 3);
         this.youtubeSauce_funny = new YouTubeSauce("funny", 3);
         this.youtubeSauce_grandayy = new YouTubeSauce("grandayy", 3);
+
+        this.redditSauce_dankMemes = new RedditSauce("dankmemes", "hot", 3);
+        // this.redditSauce_dankVideos = new RedditSauce("dankvideos", "hot", 3);
+    }
+
+    initialise() {
+        let promises = [];
+
+        // Add promises here
+        promises.push(this.redditSauce_dankMemes.initialise());
+
+        return Promise.all(promises);
     }
 
     getNext() {
         return new Promise((resolve, reject) => {
 
             Promise.all([
+                // IMGUR
                 this.imgurSauce_cats.getNext(),
                 this.imgurSauce_dank.getNext(),
                 this.imgurSauce_funny.getNext(),
+                // YouTubs
                 this.youtubeSauce_dank.getNext(),
                 this.youtubeSauce_funny.getNext(),
-                this.youtubeSauce_grandayy.getNext()
+                this.youtubeSauce_grandayy.getNext(),
+                // Reddit
+                this.redditSauce_dankMemes.getNext(),
+                // this.redditSauce_dankVideos.getNext()
+                // Twitter (coming soon)
             ])
                 .then(function(...sauces) {
                     let data = randomMerge.apply(this, arguments[0]);

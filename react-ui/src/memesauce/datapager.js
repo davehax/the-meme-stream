@@ -8,6 +8,10 @@ class RemoteDataPager {
         this.additionalHeaders = additionalHeaders || new Headers({ "accept": "application/json" });
     }
 
+    updateHeaders(additionalHeaders) {
+        this.additionalHeaders = additionalHeaders;
+    }
+
     getNext() {
         this.page++;
         return this.getCurrentPage();

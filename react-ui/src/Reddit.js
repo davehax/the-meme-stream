@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { saveFile } from './Util.js';
 
 // Item component
-class ItemImgur extends Component {
+class ItemReddit extends Component {
     constructor(props) {
         super(props);
 
@@ -13,6 +13,14 @@ class ItemImgur extends Component {
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
         this.downloadAsset = this.downloadAsset.bind(this);
+        this.scrollCanceller = this.scrollCanceller.bind(this);
+    }
+
+    // Scroll canceller
+    scrollCanceller(e) {
+        if (e.target === e.currentTarget) {
+            e.preventDefault();
+        }
     }
 
     // Open modal
@@ -26,7 +34,7 @@ class ItemImgur extends Component {
     // Close modal
     closeModal(e) {
         e.preventDefault();
-        this.setState({ modalIsActive: false });
+        this.setState({ modalIsActive: false })
         this.props.onModalClose();
     }
 
@@ -48,41 +56,19 @@ class ItemImgur extends Component {
         }
         modalClass = modalClass.join(" ");
 
-        // original photo to show
-        let thumbnail = item.link;
-        if (item.is_album) {
-            // extract image from images array
-            let coverImage = item.images.find((image) => image.id === item.cover);
-            if (typeof (coverImage) !== "undefined") {
-                thumbnail = coverImage.link;
-            }
-            else {
-                thumbnail = `https://i.imgur.com/${item.cover}.jpg`; // fallback
-            }
-        }
+        // thumbnail
+        let thumbnail = item.preview.images[0].resolutions[3].url;
 
         // copy into new variable for downloading
         let thumbnailDownload = thumbnail;
 
-        // insert 'l' before the last '.' in the thumbnail URL
-        // http://bitmapcake.blogspot.com.au/2015/05/imgur-image-sizes-and-thumbnails.html
-        let thumbnailArray = thumbnail.split(".");
-        // If the image is not a gif
-        if (thumbnailArray[thumbnailArray.length - 1].toLowerCase() !== "gif") {
-            thumbnailArray[thumbnailArray.length - 2] += "l";
-        }
-        // Join the array element with the same character we split the original string with
-        thumbnail = thumbnailArray.join(".");
-
         // modal photos
-        let modalImages = [item];
-        if (item.is_album) {
-            modalImages = item.images;
-        }
+        let modalImages = item.preview.images.map((image) => { return image.source });
+        // let modalImages = [item.preview.images.source];
 
         return (
             <div className="column">
-                <div className="card style-imgur">
+                <div className="card style-reddit">
                     <div className="card-header">
                         <h3 className="card-header-title">{item.title}</h3>
                     </div>
@@ -109,18 +95,18 @@ class ItemImgur extends Component {
                         {this.state.modalIsActive ? (
                             modalImages.map((image, idx) => {
                                 return (
-                                    <div className="card style-imgur" key={image.id} rel={image.id} download={image.link} style={{ marginBottom: "1.5rem" }}>
-                                        {image.description !== null ?
+                                    <div className="card style-imgur" key={idx} rel={image.url} download={image.url} style={{ marginBottom: "1.5rem" }}>
+                                        {/* {image.description !== null ?
                                             <div className="card-header">
                                                 <h3 className="card-header-title">{image.description}</h3>
-                                            </div> : null}
+                                            </div> : null} */}
                                         <div className="card-image">
                                             <figure className="image">
-                                                <img src={image.link} alt={image.description} />
+                                                <img src={image.url} alt={""} />
                                             </figure>
                                         </div>
                                         <footer className="card-footer">
-                                            <a className="card-footer-item" onClick={this.downloadAsset} download={image.link}>
+                                            <a className="card-footer-item" onClick={this.downloadAsset} download={image.url}>
                                                 <span className="icon has-text-info">
                                                     <i className="fa fa-arrow-circle-o-down" aria-hidden="true"></i>
                                                 </span>
@@ -139,4 +125,4 @@ class ItemImgur extends Component {
     }
 }
 
-export default ItemImgur;
+export default ItemReddit;

@@ -7,6 +7,7 @@ import dankEngine from './memesauce/getdank.js';
 import InfiniteScroll from 'react-infinite-scroller';
 import ItemImgur from './Imgur.js';
 import ItemYouTube from './YouTube.js';
+import ItemReddit from './Reddit.js';
 
 // Imports before Requires
 let _ = require('lodash');
@@ -26,7 +27,8 @@ class App extends Component {
     componentDidMount() {
         // Fetch data 
 
-        dankEngine.getNext()
+        dankEngine.initialise()
+            .then(() => dankEngine.getNext())
             .then(function (data) {
                 this.setState({
                     items: data
@@ -38,19 +40,19 @@ class App extends Component {
     }
 
     loadMore() {
-            dankEngine.getNext()
-                .then(function (data) {
-                    let allItems = this.state.items.concat(data);
+        dankEngine.getNext()
+            .then(function (data) {
+                let allItems = this.state.items.concat(data);
 
-                    this.setState({
-                        items: allItems
-                    }); 
+                this.setState({
+                    items: allItems
+                }); 
 
-                }.bind(this))
-                .catch((error) => {
-                    console.error(error);
-                })
-    }
+            }.bind(this))
+            .catch((error) => {
+                console.error(error);
+            })
+        }
 
     render() {
         let loading = (
@@ -104,16 +106,29 @@ const Row = ({ items }) => {
         <div className="columns">
             {items.map((item, idx) => {
                 if (item.__type === "imgur") {
-                    return <ItemImgur item={item} key={idx} />
+                    return <ItemImgur item={item} key={idx} onModalOpen={onModalOpen} onModalClose={onModalClose} />
                 }
-                else {
-                    return <ItemYouTube item={item} key={idx} />
+                else if (item.__type === "youtube") {
+                    return <ItemYouTube item={item} key={idx} onModalOpen={onModalOpen} onModalClose={onModalClose} />
+                }
+                else if (item.__type === "reddit") {
+                    return <ItemReddit item={item} key={idx} onModalOpen={onModalOpen} onModalClose={onModalClose} />
                 }
             })}
         </div>
     )
 }
 
+
+const onModalOpen = () => {
+    document.querySelector("body").style.overflow = "hidden";
+    document.querySelector("html").style.overflow = "hidden";
+}
+
+const onModalClose = () => {
+    document.querySelector("body").style.overflow = "auto";
+    document.querySelector("html").style.overflow = "auto";
+}
 
 
 export default App;

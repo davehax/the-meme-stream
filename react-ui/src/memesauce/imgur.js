@@ -11,7 +11,7 @@ class ImgurSauce {
     constructor(terms, sort, dateWindow, pageSize) {
         // Our remote data pager
         this.remotePager = new RemoteDataPager(this.urlGenerator.bind(this), getHeaders);
-        this.dataPager = new DataPager(this.remotePager, pageSize, this.dataStamper);
+        this.dataPager = new DataPager(this.remotePager, pageSize, this.dataParser);
         // ^^^ .bind(this) so the "this" context is preserved when the function is used as a callback ^^^
 
         // Imgur API vars
@@ -30,7 +30,7 @@ class ImgurSauce {
         return this.dataPager.getNext();
     }
 
-    dataStamper(data) {
+    dataParser(data) {
         // extract "data" property
         data = data.data; 
         // add a "__type" property with value "imgur" for use in our React display components
