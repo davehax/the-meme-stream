@@ -57,7 +57,8 @@ class ItemReddit extends Component {
         modalClass = modalClass.join(" ");
 
         // thumbnail
-        let thumbnail = item.preview.images[0].resolutions[3].url;
+        let imagePreviewItem = item.preview.images[0];
+        let thumbnail = imagePreviewItem.resolutions[imagePreviewItem.resolutions.length - 1].url;
 
         // copy into new variable for downloading
         let thumbnailDownload = thumbnail;
@@ -79,7 +80,6 @@ class ItemReddit extends Component {
                     </div>
                     <footer className="card-footer">
                         <a className="card-footer-item" onClick={this.openModal}>Open</a>
-                        {/* onClick={this.downloadAsset} */}
                         <a className="card-footer-item" download={thumbnailDownload} href={thumbnailDownload}>
                             <span className="icon has-text-info">
                                 <i className="fa fa-arrow-circle-o-down" aria-hidden="true"></i>
@@ -96,18 +96,13 @@ class ItemReddit extends Component {
                         {this.state.modalIsActive ? (
                             modalImages.map((image, idx) => {
                                 return (
-                                    <div className="card style-imgur" key={idx} rel={image.url} download={image.url} style={{ marginBottom: "1.5rem" }}>
-                                        {/* {image.description !== null ?
-                                            <div className="card-header">
-                                                <h3 className="card-header-title">{image.description}</h3>
-                                            </div> : null} */}
+                                    <div className="card style-reddit" key={idx} rel={image.url} download={image.url} style={{ marginBottom: "1.5rem" }}>
                                         <div className="card-image">
                                             <figure className="image">
                                                 <img src={image.url} alt={""} />
                                             </figure>
                                         </div>
                                         <footer className="card-footer">
-                                        {/* onClick={this.downloadAsset} */}
                                             <a className="card-footer-item" download={image.url} href={image.url}>
                                                 <span className="icon has-text-info">
                                                     <i className="fa fa-arrow-circle-o-down" aria-hidden="true"></i>

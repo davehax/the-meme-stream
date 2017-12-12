@@ -1,8 +1,8 @@
 import RemoteDataPager, { DataPager } from './datapager.js';
+import redditAccessTokenGenerator from './redditaccesstoken.js';
+import { getJson } from '../Util.js';
 
-const development = false;
 let accessToken = "";
-let expireTime = "";
 
 const getRequestHeaders = () => {
     return {
@@ -13,26 +13,11 @@ const getRequestHeaders = () => {
 }
 
 const refreshAccessToken = () => {
-    let refreshTokenUrl = "/token/reddit";
-    if (development === true) { 
-        refreshTokenUrl = `http://localhost:5000${refreshTokenUrl}`; 
-    }
-
     return new Promise((resolve, reject) => {
-        fetch(refreshTokenUrl, {
-            headers: {
-                "Accept": "application/json"
-            }
-        })
-            .then((res) => res.json())
-            .then((res) => {
-                accessToken = res.access_token;
-                resolve();
-            })
-            .catch((error) => {
-                reject(error);
-            })
-    });
+        redditAccessTokenGenerator.getToken()
+            .then((token) => { accessToken = token; resolve(); })
+            .catch((error) => { reject(error) });
+    })
 }
 
 // SAUCY! RedditSauce!
@@ -54,11 +39,7 @@ class RedditSauce {
         }
         // Otherwise get an access token before resolving
         else {
-            return new Promise((resolve, reject) => {
-                refreshAccessToken()
-                    .then(() => { resolve() })
-                    .catch((error) => { reject(error) });
-            })
+            return refreshAccessToken();
         }
     }
 
@@ -67,7 +48,7 @@ class RedditSauce {
         // generate url
         let url = `https://oauth.reddit.com/r/${this.subreddit}/${this.sort}.json`;
         if (this.nextPageToken !== "") {
-            url += `&after=${this.nextPageToken}`;
+            url += `?after=${this.nextPageToken}`;
         }
         return url;
     }
@@ -106,15 +87,6 @@ class RedditSauce {
         return parsedData;
     }
 }
-
-
-// return fetch("https://oauth.reddit.com/r/dankmemes/hot.json", {
-//     headers: {
-//         "Accept": "application/json",
-//         "Authorization": `Bearer: ${res.access_token}`,
-//         "User-Agent": "web:the-meme-stream:v0.1 (by /u/sxyfrg)"
-//     }
-// })
 
 if (accessToken === "") {
     refreshAccessToken();

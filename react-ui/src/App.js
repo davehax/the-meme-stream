@@ -114,6 +114,10 @@ const Row = ({ items }) => {
                 else if (item.__type === "reddit") {
                     return <ItemReddit item={item} key={idx} onModalOpen={onModalOpen} onModalClose={onModalClose} />
                 }
+                else {
+                    window.console && console.warn && ( console.warn("Unsupported item detected") && console.warn(item) )
+                    return null
+                }
             })}
         </div>
     )

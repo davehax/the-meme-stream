@@ -1,7 +1,7 @@
 let _ = require("lodash");
 
 // Generic get request
-const get = (url, headers) => {
+const getJson = (url, headers) => {
     // Default headers - accept json response
     headers = headers || new Headers({
         "accept": "application/json"
@@ -37,7 +37,7 @@ const randomMerge = (...arrays) => {
         clonedArrays.push(_.clone(arr));
     });
 
-    const getArraysLength = () => {
+    const getNonEmptyArraysLength = () => {
         return clonedArrays
             .filter((arr) => { return arr.length })
             .length;
@@ -55,7 +55,7 @@ const randomMerge = (...arrays) => {
         let item = arr.splice(index, 1);
         mergedArray.push(item[0]);
 
-    } while(getArraysLength() > 0);
+    } while(getNonEmptyArraysLength() > 0);
 
     return mergedArray;
 }
@@ -81,8 +81,22 @@ const saveFile = (url) => {
     xhr.send();
 }
 
+// Error handling cheat - always resolve a promise, even if it's empty!
+const resolvePromise = (p, onErrorResolveWith = []) => {
+    return new Promise((resolve) => {
+        p.then((data) => resolve(data)).catch((error) => {
+            console.error(error);
+            if (window.resolvePromiseBreakpoint) {
+                debugger;
+            }
+            resolve(onErrorResolveWith);
+        })
+    })
+}
+
 export {
-    get,
+    getJson,
     saveFile,
-    randomMerge
+    randomMerge,
+    resolvePromise
 }

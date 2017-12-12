@@ -1,4 +1,4 @@
-import { get } from '../Util.js';
+import { getJson } from '../Util.js';
 
 // Remote Data Pager class
 class RemoteDataPager {
@@ -26,7 +26,7 @@ class RemoteDataPager {
         let url = this.urlGenerator(this.page);
 
         return new Promise((resolve, reject) => {
-            get(url, this.additionalHeaders)
+            getJson(url, this.additionalHeaders)
                 .then((data) => { resolve(data); })
                 .catch((error) => { reject(error) });
         })
@@ -77,8 +77,8 @@ class DataPager {
                     this.results = this.results.concat(data);
                     // Empty resolve - this function must not be used to directly retrieve the next lot of data
                     resolve();
-                }.bind(this))
-                .catch((error) => { reject(error) })
+                }.bind(this)) // bind(this) to keep 'this' context
+                .catch((error) => {  reject(error) })
 
         });
     }

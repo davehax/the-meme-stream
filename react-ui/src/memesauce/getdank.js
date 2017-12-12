@@ -5,19 +5,18 @@ import YouTubeSauce from './youtube.js';
 import RedditSauce from './reddit.js';
 import { randomMerge } from '../Util.js';
 
-const pageSize = 9;
+const pageSize = 3;
 
 class DankEngine {
     constructor() {
-        this.imgurSauce_cats = new ImgurSauce("cats", "time", "week", 3);
+        this.imgurSauce_cats = new ImgurSauce("cats", "time", "week", pageSize);
         this.imgurSauce_dank = new ImgurSauce("dank", "viral", "week", pageSize);
         this.imgurSauce_funny = new ImgurSauce("funny", "time", "week", pageSize);
-        this.youtubeSauce_dank = new YouTubeSauce("meme", 3);
-        this.youtubeSauce_funny = new YouTubeSauce("funny", 3);
-        this.youtubeSauce_grandayy = new YouTubeSauce("grandayy", 3);
+        this.youtubeSauce_funny = new YouTubeSauce("best memes", 2);
+        this.youtubeSauce_grandayy = new YouTubeSauce("grandayy", 1);
 
-        this.redditSauce_dankMemes = new RedditSauce("dankmemes", "hot", 3);
-        // this.redditSauce_dankVideos = new RedditSauce("dankvideos", "hot", 3);
+        this.redditSauce_dankMemes = new RedditSauce("dankmemes", "hot", pageSize);
+        this.redditSauce_dankVideos = new RedditSauce("dankvideos", "hot", pageSize);
     }
 
     initialise() {
@@ -38,12 +37,11 @@ class DankEngine {
                 this.imgurSauce_dank.getNext(),
                 this.imgurSauce_funny.getNext(),
                 // YouTubs
-                this.youtubeSauce_dank.getNext(),
                 this.youtubeSauce_funny.getNext(),
                 this.youtubeSauce_grandayy.getNext(),
                 // Reddit
                 this.redditSauce_dankMemes.getNext(),
-                // this.redditSauce_dankVideos.getNext()
+                this.redditSauce_dankVideos.getNext()
                 // Twitter (coming soon)
             ])
                 .then(function(...sauces) {
