@@ -4,32 +4,19 @@ let accessToken = "";
 let expireTimeStamp = "";
 let isGettingToken = false;
 let getTokenPromise = Promise.reject();
+let inDevelopment = window.location.href.indexOf("http://localhost") === 0;
 
 // "Private" functions / variables
 
 const getAccessToken = () => {
     // We have to contact our server as the process involves Client ID and >> Client Secret <<
     // Which we can't just go around spilling anywhere!
-    let refreshTokenUrl_production = "/token/reddit";
-    let refreshTokenUrl_development = "http://localhost:5000/token/reddit";
+    let refreshTokenUrl_production = "/reddit/token";
+    let refreshTokenUrl_development = "http://localhost:5000/reddit/token";
+    let refreshTokenUrl = inDevelopment ? refreshTokenUrl_development : refreshTokenUrl_production;
 
     return new Promise((resolve, reject) => {
-        // First, attempt to contact the server via a relative URL path
-        fetch(refreshTokenUrl_production, {
-            headers: {
-                "Accept": "application/json"
-            }
-        })
-        // If this succeeds, continue on with the JSON response
-        // Or if it fails, continue on with a new request to the locally hosted dev server
-            .then((res) => {
-                if (res.ok) {
-                    return res.json()
-                }
-                else {
-                    return getJson(refreshTokenUrl_development);
-                }
-            })
+        getJson(refreshTokenUrl)
             .then((res) => resolve(res))
             .catch((error) => reject(error))
     });

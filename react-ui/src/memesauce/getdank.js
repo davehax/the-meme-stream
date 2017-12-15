@@ -24,7 +24,9 @@ class DankEngine {
         this.redditSauce_dankVideos = new RedditSauce("dankvideos", "hot", pageSize);
 
         // TWITTER
-        this.twitterSauce_memecreator = new TwitterSauce("@memeprovider", pageSize);
+        this.twitterSauce_dankmemes = new TwitterSauce("dank memes filter:media -filter:retweets", pageSize);
+        this.twitterSauce_videos = new TwitterSauce("hilarious :) filter:native_video -filter:retweets", pageSize);
+        this.twitterSauce_freememeskids = new TwitterSauce("@freememeskids filter:media -filter:retweets", pageSize);
     }
 
     initialise() {
@@ -53,7 +55,9 @@ class DankEngine {
                 resolvePromise(this.redditSauce_dankMemes.getNext()),
                 resolvePromise(this.redditSauce_dankVideos.getNext()),
                 // Twitter (coming soon)
-                resolvePromise(this.twitterSauce_memecreator.getNext())
+                resolvePromise(this.twitterSauce_dankmemes.getNext()),
+                resolvePromise(this.twitterSauce_videos.getNext()),
+                resolvePromise(this.twitterSauce_freememeskids.getNext())
             ])
                 .then(function(...sauces) {
                     let data = randomMerge.apply(this, arguments[0]);

@@ -8,6 +8,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 import ItemImgur from './Imgur.js';
 import ItemYouTube from './YouTube.js';
 import ItemReddit from './Reddit.js';
+import ItemTwitter from './Twitter.js';
 
 // Imports before Requires
 let _ = require('lodash');
@@ -109,10 +110,13 @@ const Row = ({ items }) => {
                     return <ItemImgur item={item} key={idx} onModalOpen={onModalOpen} onModalClose={onModalClose} />
                 }
                 else if (item.__type === "youtube") {
-                    return <ItemYouTube item={item} key={idx} onModalOpen={onModalOpen} onModalClose={onModalClose} />
+                    return <ItemYouTube item={item} key={idx} />
                 }
                 else if (item.__type === "reddit") {
                     return <ItemReddit item={item} key={idx} onModalOpen={onModalOpen} onModalClose={onModalClose} />
+                }
+                else if (item.__type === "twitter") {
+                    return <ItemTwitter item={item} key={idx} />
                 }
                 else {
                     window.console && console.warn && ( console.warn("Unsupported item detected") && console.warn(item) )
