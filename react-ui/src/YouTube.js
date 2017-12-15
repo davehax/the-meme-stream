@@ -13,7 +13,7 @@ class ItemYouTube extends Component {
                         <h3 className="card-header-title">{item.snippet.title}</h3>
                     </div>
                     <div className="card-video" style={{ cursor: "pointer" }}>
-                        <iframe src={`https://www.youtube.com/embed/${item.id.videoId}`} allowFullScreen="true" mozallowfullscreen="true"></iframe>
+                        <iframe src={`https://www.youtube.com/embed/${item.id.videoId}`} allowFullScreen="true" mozallowfullscreen="true" title={item.snippet.title}></iframe>
                     </div>
                 </div>
             </div>

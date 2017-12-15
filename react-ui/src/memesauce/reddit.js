@@ -1,6 +1,5 @@
 import RemoteDataPager, { DataPager } from './datapager.js';
 import redditAccessTokenGenerator from './redditaccesstoken.js';
-import { getJson } from '../Util.js';
 
 let accessToken = "";
 
@@ -22,9 +21,9 @@ const refreshAccessToken = () => {
 
 // SAUCY! RedditSauce!
 class RedditSauce {
-    constructor(subreddit, sort) {
+    constructor(subreddit, sort = "hot", maxResults = 3) {
         this.remotePager = new RemoteDataPager(this.urlGenerator.bind(this), getRequestHeaders());
-        this.dataPager = new DataPager(this.remotePager, 3, this.dataParser.bind(this));
+        this.dataPager = new DataPager(this.remotePager, maxResults, this.dataParser.bind(this));
 
         this.subreddit = subreddit;
         this.sort = sort;
@@ -32,7 +31,7 @@ class RedditSauce {
     }
 
     // Call this method first! An access token must be retrieved from the server first before use.
-    initialise() {
+    static initialise() {
         // If accessToken is already set, resolve
         if (accessToken !== "") {
             return Promise.resolve();
