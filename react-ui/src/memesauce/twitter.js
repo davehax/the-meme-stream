@@ -27,12 +27,20 @@ const refreshAccessToken = () => {
 }
 
 class TwitterSauce {
-    constructor(searchQuery, count = 5) {
-        this.remoteDataPager = new RemoteDataPager(this.urlGenerator.bind(this));
+    constructor(query, count = 5, type = "search") {
+        this.type = type;
+
+        // Pick a URL generator to use based on the endpoint/type
+        let urlGenerator = this.searchUrlGenerator.bind(this);
+        if (type === "timeline") {
+            urlGenerator = this.timelineUrlGenerator.bind(this);
+        }
+
+        this.remoteDataPager = new RemoteDataPager(urlGenerator);
         this.dataPager = new DataPager(this.remoteDataPager, count, this.dataParser.bind(this));
 
         this.nextResultsUrl = undefined;
-        this.searchQuery = encodeURIComponent(searchQuery);
+        this.query = encodeURIComponent(query);
     }
 
     // Static initialise function
@@ -45,12 +53,17 @@ class TwitterSauce {
         }
     }
 
+    getNext() {
+        return this.dataPager.getNext();
+    }
+
+    // URL GENERATORS
     // Generate the next URL to request data from
     // https://developer.twitter.com/en/docs/tweets/timelines/api-reference/get-statuses-user_timeline
     // https://developer.twitter.com/en/docs/tweets/search/api-reference/get-search-tweets
     // https://developer.twitter.com/en/docs/tweets/search/guides/standard-operators
-    urlGenerator(page) {
-        let url = `${proxyUrl}?url=${encodeURIComponent(`/search/tweets.json?q=${this.searchQuery}&result_type=recent&count=100&lang=en`)}`;
+    searchUrlGenerator(page) {
+        let url = `${proxyUrl}?url=${encodeURIComponent(`/search/tweets.json?q=${this.query}&result_type=recent&count=100&lang=en`)}`;
 
         if (typeof(this.nextResultsUrl) !== "undefined") {
             url = `${proxyUrl}?url=${encodeURIComponent(`/search/tweets.json${this.nextResultsUrl}`)}`;
@@ -59,23 +72,38 @@ class TwitterSauce {
         return `${url}&token=${accessToken}`;
     }
 
-    getNext() {
-        return this.dataPager.getNext();
+    timelineUrlGenerator(page) {
+        let url = `${proxyUrl}?url=${encodeURIComponent(`/statuses/user_timeline.json?screen_name=${this.query}&exclude_replies=true&include_rts=false&count=100`)}`;
+
+        if (typeof(this.nextResultsUrl) !== "undefined") {
+            url += `&max_id=${this.nextResultsUrl}`;
+        }
+
+        return `${url}&token=${accessToken}`;
     }
 
     // Parse the data received in the DataPager class
     dataParser(data) {
-        this.nextResultsUrl = data.search_metadata.next_results;
-
-        // Filter out tweets without media
-        data = data.statuses.filter((item) => typeof(item.entities.media) !== "undefined");
-
-        // Stamp the tweets with __type = "twitter"
-        for (let i = 0; i < data.length; i++) {
-            data[i].__type = "twitter";
+        let tweets = [];
+        // extract tweets + other operations based on endpoint called
+        if (this.type === "search") {
+            tweets = data.statuses;
+            this.nextResultsUrl = data.search_metadata.next_results;
+        }
+        else if (this.type === "timeline") {
+            tweets = data;
+            this.nextResultsUrl = tweets[tweets.length - 1].id_str;
         }
 
-        return data;
+        // Filter out tweets without media
+        tweets = tweets.filter((item) => typeof(item.entities.media) !== "undefined");
+
+        // Stamp the tweets with __type = "twitter"
+        for (let i = 0; i < tweets.length; i++) {
+            tweets[i].__type = "twitter";
+        }
+
+        return tweets;
     }
 }
 

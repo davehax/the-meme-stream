@@ -10,23 +10,26 @@ const pageSize = 3;
 
 class DankEngine {
     constructor() {
+
+        this.sauces = [];
+
         // IMGUR
-        this.imgurSauce_cats = new ImgurSauce("cats", "time", "week", pageSize);
-        this.imgurSauce_dank = new ImgurSauce("dank", "viral", "week", pageSize);
-        this.imgurSauce_funny = new ImgurSauce("funny", "time", "week", pageSize);
+        this.sauces.push(new ImgurSauce("cats", "time", "week", pageSize));
+        this.sauces.push(new ImgurSauce("dank", "viral", "week", pageSize));
+        this.sauces.push(new ImgurSauce("funny", "time", "week", pageSize));
 
         // YOUTUBE
-        this.youtubeSauce_funny = new YouTubeSauce("best memes", 2);
-        this.youtubeSauce_grandayy = new YouTubeSauce("grandayy", 1);
+        this.sauces.push(new YouTubeSauce("best memes", 2));
+        this.sauces.push(new YouTubeSauce("grandayy", 1));
 
         // REDDIT
-        this.redditSauce_dankMemes = new RedditSauce("dankmemes", "hot", pageSize);
-        this.redditSauce_dankVideos = new RedditSauce("dankvideos", "hot", pageSize);
+        this.sauces.push(new RedditSauce("dankmemes", "hot", pageSize));
 
         // TWITTER
-        this.twitterSauce_dankmemes = new TwitterSauce("dank memes filter:media -filter:retweets", pageSize);
-        this.twitterSauce_videos = new TwitterSauce("hilarious :) filter:native_video -filter:retweets", pageSize);
-        this.twitterSauce_freememeskids = new TwitterSauce("@freememeskids filter:media -filter:retweets", pageSize);
+        // this.sauces.push(new TwitterSauce("dank memes filter:media -filter:retweets", pageSize));
+        this.sauces.push(new TwitterSauce("hilarious :) filter:native_video -filter:retweets", pageSize));
+        this.sauces.push(new TwitterSauce("freememeskids", pageSize, "timeline"));
+        this.sauces.push(new TwitterSauce("memes", pageSize, "timeline"));
     }
 
     initialise() {
@@ -43,22 +46,14 @@ class DankEngine {
         return new Promise((resolve, reject) => {
             // Using "resolvePromise" wrapper to prevent the application from breaking if any requests fail
 
-            Promise.all([
-                // IMGUR
-                resolvePromise(this.imgurSauce_cats.getNext()),
-                resolvePromise(this.imgurSauce_dank.getNext()),
-                resolvePromise(this.imgurSauce_funny.getNext()),
-                // YouTubs
-                resolvePromise(this.youtubeSauce_funny.getNext()),
-                resolvePromise(this.youtubeSauce_grandayy.getNext()),
-                // Reddit
-                resolvePromise(this.redditSauce_dankMemes.getNext()),
-                resolvePromise(this.redditSauce_dankVideos.getNext()),
-                // Twitter (coming soon)
-                resolvePromise(this.twitterSauce_dankmemes.getNext()),
-                resolvePromise(this.twitterSauce_videos.getNext()),
-                resolvePromise(this.twitterSauce_freememeskids.getNext())
-            ])
+            let promises = [];
+            this.sauces.forEach((sauce) => {
+                promises.push(
+                    resolvePromise(sauce.getNext())
+                );
+            });
+            
+            Promise.all(promises)
                 .then(function(...sauces) {
                     let data = randomMerge.apply(this, arguments[0]);
                     resolve(data);

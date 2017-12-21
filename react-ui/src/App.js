@@ -47,13 +47,13 @@ class App extends Component {
 
                 this.setState({
                     items: allItems
-                }); 
+                });
 
             }.bind(this))
             .catch((error) => {
                 console.error(error);
             })
-        }
+    }
 
     render() {
         let loading = (
@@ -74,6 +74,7 @@ class App extends Component {
                 </section>
                 <section className="section">
                     <div className="container">
+                        {/* <HellYeahLoading /> */}
                         {this.state.items.length ? (
                             <InfiniteScroll
                                 pageStart={0}
@@ -84,12 +85,24 @@ class App extends Component {
                             >
                                 <Memes items={this.state.items} />
                             </InfiniteScroll>
-                        ) : null}
+                        ) : <HellYeahLoading />}
                     </div>
                 </section>
             </div>
         );
     }
+}
+
+// Hell Yeah LOADING!
+const HellYeahLoading = () => {
+    return (
+        <div className="fullscreen-loader hero is-danger is-bold">
+            <div className="centered">
+                <h1 className="title">L O A D I N G</h1>
+                <p>Memes incoming!</p>
+            </div>
+        </div>
+    )
 }
 
 // Memes component
@@ -116,10 +129,10 @@ const Row = ({ items }) => {
                     return <ItemReddit item={item} key={idx} onModalOpen={onModalOpen} onModalClose={onModalClose} />
                 }
                 else if (item.__type === "twitter") {
-                    return <ItemTwitter item={item} key={idx} />
+                    return <ItemTwitter item={item} key={idx} onModalOpen={onModalOpen} onModalClose={onModalClose} />
                 }
                 else {
-                    window.console && console.warn && ( console.warn("Unsupported item detected") && console.warn(item) )
+                    window.console && console.warn && (console.warn("Unsupported item detected") && console.warn(item))
                     return null
                 }
             })}
