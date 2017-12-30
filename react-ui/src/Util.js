@@ -94,9 +94,15 @@ const resolvePromise = (p, onErrorResolveWith = []) => {
     })
 }
 
+// Empty string 
+const isEmptyString = (s) => {
+    return (s === null || typeof(s) === "undefined" || s === "" || s.toString().replace(/\s+/) === "");
+}
+
 export {
     getJson,
     saveFile,
     randomMerge,
-    resolvePromise
+    resolvePromise,
+    isEmptyString
 }

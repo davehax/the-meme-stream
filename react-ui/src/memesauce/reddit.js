@@ -69,21 +69,32 @@ class RedditSauce {
             return !item.data.stickied && !item.data.is_self && item.data.post_hint === "image";
         });
 
-        parsedData = parsedData.map((item) => { return item.data });
+        return parsedData.map((item) => {
 
-        parsedData.forEach((item) => { 
-            // stamp item with __type = "reddit"
-            item.__type = "reddit";
-            
-            // fix all image urls >_>
-            for (let i = 0; i < item.preview.images.length; i++) {
-                for (let j = 0; j < item.preview.images[i].resolutions.length; j++) {
-                    item.preview.images[i].resolutions[j].url = item.preview.images[i].resolutions[j].url.replace(/&amp;/gi, "&");
-                }
+            // thumbnail
+            let imagePreviewItem = item.data.preview.images[0];
+            let thumbnail = imagePreviewItem.resolutions[imagePreviewItem.resolutions.length - 1].url;
+
+            // replace &amp; with &
+            thumbnail = thumbnail.replace(/&amp;/gi, "&");
+
+            // copy into new variable for downloading
+            // let thumbnailDownload = thumbnail;
+
+            let preview = {
+                mediaType: "image",
+                lowResUrl: thumbnail,
+                highResUrl: thumbnail
             }
-        })
-            
-        return parsedData;
+
+            return {
+                __type: "reddit",
+                title: item.data.title,
+                preview: preview,
+                media: [preview]
+            }
+
+        });
     }
 }
 

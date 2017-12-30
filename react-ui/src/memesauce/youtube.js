@@ -33,7 +33,7 @@ class YouTubeSauce {
         if (this.nextPageToken !== "") {
             url += `&nextPageToken=${this.nextPageToken}`;
         }
-        return url;
+        return `${url}&_=${new Date().getTime()}`;
     }
 
     getNext() {
@@ -49,12 +49,31 @@ class YouTubeSauce {
             this.nextPageToken = "";
         }
 
-        // Add __type property = "youtube" for use in React display components
-        for (let i = 0; i < data.items.length; i++) {
-            data.items[i].__type = "youtube";
-        }
+        // convert to the data type expected by our Card component
+        let items = data.items.map((item) => {
+            let videoUrl = `https://www.youtube.com/watch?v=${item.id.videoId}`;
+            let videoEmbedUrl = `https://www.youtube.com/embed/${item.id.videoId}`;
+            let videoDownloadUrl = `https://keepvid.com/?url=${encodeURIComponent(videoUrl)}`;
 
-        return data.items;
+            return {
+                __type: "youtube",
+                title: item.snippet.title,
+                preview: {
+                    mediaType: "iframe",
+                    lowResUrl: videoEmbedUrl,
+                    highResUrl: videoEmbedUrl,
+                    downloadOverride: videoDownloadUrl
+                },
+                media: [{
+                    mediaType: "iframe",
+                    lowResUrl: videoEmbedUrl,
+                    highResUrl: videoEmbedUrl,
+                    downloadOverride: videoDownloadUrl
+                }]
+            }
+        });
+
+        return items;
     }
 }
 

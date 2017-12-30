@@ -7,6 +7,18 @@ const getHeaders = new Headers({
     "authorization": "Client-ID 7efb2775425b24a"
 });
 
+const getThumbnailLink = (url) => {
+    // insert 'l' before the last '.' in the thumbnail URL
+    // http://bitmapcake.blogspot.com.au/2015/05/imgur-image-sizes-and-thumbnails.html
+    let thumbnailArray = url.split(".");
+    // If the image is not a gif
+    if (thumbnailArray[thumbnailArray.length - 1].toLowerCase() !== "gif") {
+        thumbnailArray[thumbnailArray.length - 2] += "l";
+    }
+    // Join the array element with the same character we split the original string with
+    return thumbnailArray.join(".");
+}
+
 class ImgurSauce {
     constructor(terms, sort, dateWindow, pageSize) {
         // Our remote data pager
@@ -31,14 +43,59 @@ class ImgurSauce {
     }
 
     dataParser(data) {
-        // extract "data" property
-        data = data.data; 
-        // add a "__type" property with value "imgur" for use in our React display components
-        for (let i = 0; i < data.length; i++) {
-            data[i].__type = "imgur";
-        }
+        // Convert imgur API response into object(s) usable by our "Card" class
+        let items = data.data.map((item) => {
+            // Original photo to show
+            let preview = item.link;
+            if (item.is_album) {
+                // extract image from images array
+                let coverImage = item.images.find((image) => image.id === item.cover);
+                if (typeof (coverImage) !== "undefined") {
+                    preview = coverImage.link;
+                }
+                else {
+                    preview = `https://i.imgur.com/${item.cover}.jpg`; // fallback
+                }
+            }
 
-        return data;
+            // copy into new variable for downloading
+            let previewDownload = preview;
+            preview = getThumbnailLink(preview);
+
+            // Preview Object
+            let previewObj = {
+                mediaType: "image",
+                lowResUrl: preview,
+                highResUrl: previewDownload
+            }
+
+            // Media Array
+            let mediaArr = [];
+
+            if (!item.is_album) {
+                mediaArr = [previewObj];
+            }
+            else {
+                mediaArr = item.images.map((image) => {
+                    return {
+                        mediaType: "image",
+                        lowResUrl: image.link,
+                        highResUrl: image.link
+                    }
+                });
+            }
+
+            // Finally, return our object
+            return {
+                __type: "imgur",
+                title: item.title,
+                preview: previewObj,
+                media: mediaArr
+            }
+
+        })
+
+        return items;
     }
 }
 

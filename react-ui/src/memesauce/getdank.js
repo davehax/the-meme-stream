@@ -13,21 +13,23 @@ class DankEngine {
 
         this.sauces = [];
 
-        // IMGUR
+        // // IMGUR
         this.sauces.push(new ImgurSauce("cats", "time", "week", pageSize));
         this.sauces.push(new ImgurSauce("dank", "viral", "week", pageSize));
         this.sauces.push(new ImgurSauce("funny", "time", "week", pageSize));
 
-        // YOUTUBE
+        // // YOUTUBE
         this.sauces.push(new YouTubeSauce("best memes", 2));
         this.sauces.push(new YouTubeSauce("grandayy", 1));
 
-        // REDDIT
+        // // REDDIT
         this.sauces.push(new RedditSauce("dankmemes", "hot", pageSize));
+        this.sauces.push(new RedditSauce("memes", "new", pageSize));
 
-        // TWITTER
+        // // TWITTER
         // this.sauces.push(new TwitterSauce("dank memes filter:media -filter:retweets", pageSize));
-        this.sauces.push(new TwitterSauce("hilarious :) filter:native_video -filter:retweets", pageSize));
+        // this.sauces.push(new TwitterSauce("hilarious :) filter:native_video -filter:retweets", pageSize));
+        this.sauces.push(new TwitterSauce("DailyMemesPlug", pageSize, "timeline"));
         this.sauces.push(new TwitterSauce("freememeskids", pageSize, "timeline"));
         this.sauces.push(new TwitterSauce("memes", pageSize, "timeline"));
     }

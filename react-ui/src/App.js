@@ -1,14 +1,9 @@
 import React, { Component } from 'react';
-// import logo from './logo.svg';
 import 'bulma/css/bulma.css';
 import './App.css';
-// import { get } from './Util.js';
 import dankEngine from './memesauce/getdank.js';
 import InfiniteScroll from 'react-infinite-scroller';
-import ItemImgur from './Imgur.js';
-import ItemYouTube from './YouTube.js';
-import ItemReddit from './Reddit.js';
-import ItemTwitter from './Twitter.js';
+import Card from './Card.js';
 
 // Imports before Requires
 let _ = require('lodash');
@@ -74,7 +69,6 @@ class App extends Component {
                 </section>
                 <section className="section">
                     <div className="container">
-                        {/* <HellYeahLoading /> */}
                         {this.state.items.length ? (
                             <InfiniteScroll
                                 pageStart={0}
@@ -120,16 +114,16 @@ const Row = ({ items }) => {
         <div className="columns">
             {items.map((item, idx) => {
                 if (item.__type === "imgur") {
-                    return <ItemImgur item={item} key={idx} onModalOpen={onModalOpen} onModalClose={onModalClose} />
+                    return <Card className="style-imgur" title={item.title} type="imgur" items={item} key={idx} onModalOpen={onModalOpen} onModalClose={onModalClose} />
                 }
                 else if (item.__type === "youtube") {
-                    return <ItemYouTube item={item} key={idx} />
+                    return <Card className="style-youtube" title={item.title} type="youtube" items={item} key={idx} />
                 }
                 else if (item.__type === "reddit") {
-                    return <ItemReddit item={item} key={idx} onModalOpen={onModalOpen} onModalClose={onModalClose} />
+                    return <Card className="style-reddit" title={item.title} type="reddit" items={item} key={idx} onModalOpen={onModalOpen} onModalClose={onModalClose} />
                 }
                 else if (item.__type === "twitter") {
-                    return <ItemTwitter item={item} key={idx} onModalOpen={onModalOpen} onModalClose={onModalClose} />
+                    return <Card className="style-twitter" title={item.title} type="twitter" items={item} key={idx} onModalOpen={onModalOpen} onModalClose={onModalClose} />
                 }
                 else {
                     window.console && console.warn && (console.warn("Unsupported item detected") && console.warn(item))
