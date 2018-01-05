@@ -20,9 +20,9 @@ class App extends Component {
         this.loadMore = _.throttle(this.loadMore, 500);
     }
 
+    // Lifecycle - component did mount
     componentDidMount() {
         // Fetch data 
-
         dankEngine.initialise()
             .then(() => dankEngine.getNext())
             .then(function (data) {
@@ -35,6 +35,7 @@ class App extends Component {
             })
     }
 
+    // Load more data from the dank engine
     loadMore() {
         dankEngine.getNext()
             .then(function (data) {
@@ -58,7 +59,7 @@ class App extends Component {
         );
 
         return (
-            <div className="app">
+            <div className="app" ref="app">
                 <section className="hero is-danger is-bold">
                     <div className="hero-body">
                         <div className="container has-text-centered">
@@ -67,21 +68,24 @@ class App extends Component {
                         </div>
                     </div>
                 </section>
-                <section className="section">
-                    <div className="container">
-                        {this.state.items.length ? (
-                            <InfiniteScroll
-                                pageStart={0}
-                                loadMore={this.loadMore}
-                                hasMore={true}
-                                loader={loading}
-                                threshold={750}
-                            >
+
+                {this.state.items.length ? (
+                    <InfiniteScroll
+                        pageStart={0}
+                        loadMore={this.loadMore}
+                        hasMore={true}
+                        loader={loading}
+                        threshold={750}
+                        useWindow={false}
+                    >
+                        <section className="section">
+                            <div className="container">
                                 <Memes items={this.state.items} />
-                            </InfiniteScroll>
-                        ) : <HellYeahLoading />}
-                    </div>
-                </section>
+                            </div>
+                        </section>
+                    </InfiniteScroll>
+                ) : <HellYeahLoading />}
+
             </div>
         );
     }
@@ -100,7 +104,7 @@ const HellYeahLoading = () => {
 }
 
 // Memes component
-const Memes = ({ items }) => {
+const Memes = ({ items, mapper }) => {
     let chunkedItems = _.chunk(items, 3);
 
     return (
@@ -109,7 +113,7 @@ const Memes = ({ items }) => {
 }
 
 // Row component
-const Row = ({ items }) => {
+const Row = ({ items, mapper }) => {
     return (
         <div className="columns">
             {items.map((item, idx) => {
@@ -144,6 +148,5 @@ const onModalClose = () => {
     document.querySelector("body").style.overflow = "auto";
     document.querySelector("html").style.overflow = "auto";
 }
-
 
 export default App;

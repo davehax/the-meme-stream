@@ -162,9 +162,6 @@ class TwitterSauce {
 
         // Build card objects from each tweet
         return tweets.map((tweet) => {
-
-            let title = tweet.text;
-
             // Twitter docs recommends the use of extended_entities over entities where it exists
             let entities = tweet.entities;
 

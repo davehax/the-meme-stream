@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { saveFile, isEmptyString } from './Util.js';
 import shallowequal from 'shallowequal';
+import Observer from 'react-intersection-observer';
 
 // Generic card component
 class Card extends Component {
@@ -8,12 +9,14 @@ class Card extends Component {
         super(props);
 
         this.state = {
-            modalIsActive: false
+            modalIsActive: false,
+            cardIsVisible: true
         }
 
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
         this.downloadAsset = this.downloadAsset.bind(this);
+        this.onVisibilityChange = this.onVisibilityChange.bind(this);
 
         // expected properties:
         // title (string)
@@ -68,6 +71,18 @@ class Card extends Component {
         saveFile(e.currentTarget.download);
     }
 
+    onVisibilityChange(isVisible) {
+        let card = this.refs["card"];
+        let width = card ? card.clientWidth : 100;
+        let height = card ? card.clientHeight : 100;
+
+        this.setState({
+            cardIsVisible: isVisible,
+            placeholderWidth: width,
+            placeholderHeight: height
+        });
+    }
+
     render() {
         // Preview item
         let preview = null;
@@ -103,26 +118,34 @@ class Card extends Component {
 
         return (
             <div className="column">
-                <div className={`card ${this.props.className}`}>
-                    {/* Title */}
-                    <div className="card-header">
-                        {!isEmptyString(this.props.title) ? <h3 className="card-header-title">{this.props.title}</h3> : null}
-                    </div>
+                {/* Use the new IntersectionObserver react wrapper to act as a virtual viewport */}
+                <Observer onChange={this.onVisibilityChange}>
+                    {this.state.cardIsVisible === true ? (
+                        <div className={`card ${this.props.className}`} ref="card">
+                            {/* Title */}
+                            <div className="card-header">
+                                {!isEmptyString(this.props.title) ? <h3 className="card-header-title">{this.props.title}</h3> : null}
+                            </div>
 
-                    {/* Content */}
-                    {preview}
+                            {/* Content */}
+                            {preview}
 
-                    {/* Footer */}
-                    <footer className="card-footer">
-                        {this.props.type !== "youtube" ? <a className="card-footer-item" onClick={this.openModal}>Open</a> : null }
-                        <a className="card-footer-item" download={previewDownloadUrl} href={previewDownloadUrl}>
-                            <span className="icon has-text-info">
-                                <i className="fa fa-arrow-circle-o-down" aria-hidden="true"></i>
-                            </span>
-                            <span>Download</span>
-                        </a>
-                    </footer>
-                </div>
+                            {/* Footer */}
+                            <footer className="card-footer">
+                                {this.props.type !== "youtube" ? <a className="card-footer-item" onClick={this.openModal}>Open</a> : null}
+                                <a className="card-footer-item" download={previewDownloadUrl} href={previewDownloadUrl}>
+                                    <span className="icon has-text-info">
+                                        <i className="fa fa-arrow-circle-o-down" aria-hidden="true"></i>
+                                    </span>
+                                    <span>Download</span>
+                                </a>
+                            </footer>
+                        </div>
+
+                    ) : (
+                        <div style={{ width: `${this.state.placeholderWidth}px`, height: `${this.state.placeholderHeight}px` }} />
+                    )}
+                </Observer>
 
                 {/* Modal */}
                 {this.props.items.media.length ? (
@@ -222,7 +245,7 @@ const IFrameContent = ({ media }) => {
 
     return (
         <div className="card-video has-iframe" style={{ cursor: "pointer" }}>
-            <iframe src={media.highResUrl} allowFullScreen="true" mozallowfullscreen="true" title={media.title}></iframe>
+            <iframe src={media.highResUrl} allowFullScreen="true" mozallowfullscreen="true" title={title}></iframe>
         </div>
     )
 }
